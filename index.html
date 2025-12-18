@@ -36,8 +36,14 @@
         } = Recharts;
 
         // --- CONFIGURATION ---
-        // กรุณาใส่ URL ล่าสุดที่คุณ Deploy (เลือก New version) ลงที่นี่
-        const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz3JEBOx5ZV5HjrgzmPaf4xzuysapvtNSQkpgl62Nml6y6SwtghDnxoF-u_8T4QHcw_8g/exec";
+        const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwgEh2mlvOsTr5BkI41Y08VKcI47v6LG7GjjrILdH7dICtAvbiS867Ec1qssO9zbKrt/exec";
+
+        // --- Helper Function for Date ---
+        const formatDateSimple = (dateString) => {
+            if (!dateString) return "";
+            // ตัดเวลาทิ้ง (เอาแค่ 10 ตัวแรก YYYY-MM-DD)
+            return dateString.substring(0, 10);
+        };
 
         // --- Icons ---
         const IconWallet = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"/><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"/></svg>;
@@ -62,6 +68,11 @@
         const IconLoader = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`${className} animate-[spin_1s_linear_infinite]`}><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>;
         const IconCloudDownload = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/><path d="M12 12v9"/><path d="m8 17 4 4 4-4"/></svg>;
         const IconWifiOff = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><line x1="1" x2="23" y1="1" y2="23"/><path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55"/><path d="M5 12.55a10.94 10.94 0 0 1 5.17-2.39"/><path d="M10.71 5.05A16 16 0 0 1 22.58 9"/><path d="M1.42 9a15.91 15.91 0 0 1 4.7-2.88"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" x2="12.01" y1="20" y2="20"/></svg>;
+        const IconCreditCard = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg>;
+        const IconCheckCircle = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>;
+        const IconClock = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>;
+        const IconPauseCircle = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><circle cx="12" cy="12" r="10"/><line x1="10" x2="10" y1="15" y2="9"/><line x1="14" x2="14" y1="15" y2="9"/></svg>;
+        const IconFileSpreadsheet = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><path d="M8 13h2"/><path d="M8 17h2"/><path d="M14 13h2"/><path d="M14 17h2"/></svg>;
 
         const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8', '#ff6b6b'];
 
@@ -100,6 +111,70 @@
                         <h3 className="text-lg font-bold text-slate-800 mb-2">{title}</h3>
                         <p className="text-slate-600 mb-6 text-sm">{message}</p>
                         <button onClick={onClose} className="w-full px-4 py-2 bg-slate-900 text-white hover:bg-slate-800 rounded-lg font-medium text-sm">ตกลง</button>
+                    </div>
+                </div>
+            );
+        };
+
+        // Modal for Updating Payment Status & Date
+        const StatusUpdateModal = ({ isOpen, onClose, onConfirm, currentTransaction }) => {
+            const [newStatus, setNewStatus] = useState('paid');
+            const [paymentDate, setPaymentDate] = useState('');
+
+            useEffect(() => {
+                if (isOpen && currentTransaction) {
+                    setNewStatus(currentTransaction.status === 'pending' ? 'paid' : currentTransaction.status);
+                    // Default to current datetime formatted for input
+                    const now = new Date();
+                    now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+                    setPaymentDate(now.toISOString().slice(0, 16));
+                }
+            }, [isOpen, currentTransaction]);
+
+            if (!isOpen) return null;
+
+            return (
+                <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+                    <div className="bg-white rounded-xl shadow-xl max-w-md w-full p-6 animate-[fadeIn_0.2s_ease-out]">
+                        <h3 className="text-lg font-bold text-slate-800 mb-4">อัปเดตสถานะการจ่ายเงิน</h3>
+                        
+                        <div className="space-y-4">
+                            <div>
+                                <label className="block text-sm font-medium text-slate-700 mb-2">เลือกสถานะใหม่</label>
+                                <div className="space-y-2">
+                                    <label className="flex items-center gap-2 p-3 border rounded-lg cursor-pointer hover:bg-slate-50">
+                                        <input type="radio" name="modalStatus" value="pending" checked={newStatus === 'pending'} onChange={(e) => setNewStatus(e.target.value)} className="accent-amber-500 w-4 h-4"/>
+                                        <div className="flex items-center gap-2 text-amber-700"><IconClock size={16}/> รอดำเนินการ (Pending)</div>
+                                    </label>
+                                    <label className="flex items-center gap-2 p-3 border rounded-lg cursor-pointer hover:bg-slate-50">
+                                        <input type="radio" name="modalStatus" value="paid" checked={newStatus === 'paid'} onChange={(e) => setNewStatus(e.target.value)} className="accent-emerald-500 w-4 h-4"/>
+                                        <div className="flex items-center gap-2 text-emerald-700"><IconCheckCircle size={16}/> จ่าย/รับแล้ว (Completed)</div>
+                                    </label>
+                                    <label className="flex items-center gap-2 p-3 border rounded-lg cursor-pointer hover:bg-slate-50">
+                                        <input type="radio" name="modalStatus" value="hold" checked={newStatus === 'hold'} onChange={(e) => setNewStatus(e.target.value)} className="accent-gray-500 w-4 h-4"/>
+                                        <div className="flex items-center gap-2 text-gray-600"><IconPauseCircle size={16}/> พักการจ่ายชั่วคราว (On Hold)</div>
+                                    </label>
+                                </div>
+                            </div>
+
+                            {newStatus !== 'pending' && (
+                                <div>
+                                    <label className="block text-sm font-medium text-slate-700 mb-1">วันที่และเวลาที่ดำเนินการจริง</label>
+                                    <input 
+                                        type="datetime-local" 
+                                        value={paymentDate} 
+                                        onChange={(e) => setPaymentDate(e.target.value)} 
+                                        className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none"
+                                    />
+                                    <p className="text-xs text-slate-400 mt-1">*เวลาจะถูกบันทึกเพื่อใช้อ้างอิง</p>
+                                </div>
+                            )}
+                        </div>
+
+                        <div className="flex gap-3 mt-6 justify-end">
+                            <button onClick={onClose} className="px-4 py-2 text-slate-600 hover:bg-slate-100 rounded-lg font-medium text-sm">ยกเลิก</button>
+                            <button onClick={() => onConfirm(newStatus, paymentDate)} className="px-4 py-2 bg-emerald-600 text-white hover:bg-emerald-700 rounded-lg font-medium text-sm shadow-md">บันทึก</button>
+                        </div>
                     </div>
                 </div>
             );
@@ -174,8 +249,8 @@
             const filteredOptions = options.filter(option => {
                 const searchLower = searchTerm.toLowerCase();
                 return (
-                    option.name.toLowerCase().includes(searchLower) || 
-                    (option.docNumber && option.docNumber.toLowerCase().includes(searchLower))
+                    String(option.name).toLowerCase().includes(searchLower) || 
+                    (option.docNumber && String(option.docNumber).toLowerCase().includes(searchLower))
                 );
             });
 
@@ -229,31 +304,59 @@
             return new Intl.NumberFormat('th-TH', { style: 'currency', currency: 'THB', maximumFractionDigits: 0 }).format(amount);
         };
 
-        const INITIAL_FORM_STATE = { date: new Date().toISOString().split('T')[0], type: 'income', category: 'รายรับจากงานขาย', amount: '', note: '', projectRef: '', docNumber: '' };
+        const INITIAL_FORM_STATE = { date: new Date().toISOString().split('T')[0], type: 'income', category: 'รายรับจากงานขาย', amount: '', note: '', projectRef: '', docNumber: '', status: 'pending' };
+
+        // --- Mock Data (Fallback) ---
+        const MOCK_DATA_FALLBACK = [
+            { id: 1, date: '2023-10-05', type: 'income', category: 'รายรับจากงานขาย', amount: 450000, note: 'เงินมัดจำ (Mock)', projectRef: 'Project Alpha', docNumber: 'INV-001', status: 'paid' },
+            { id: 2, date: '2023-10-10', type: 'expense', category: 'ต้นทุนหน้างาน', amount: 120000, note: 'ค่าวัสดุ (Mock)', projectRef: 'Project Alpha', docNumber: 'INV-001', status: 'pending' },
+            { id: 3, date: '2023-10-25', type: 'expense', category: 'เงินเดือน', amount: 150000, note: 'เงินเดือน ต.ค. (Mock)', projectRef: 'General', docNumber: '', status: 'paid' }
+        ];
+
 
         // --- Main App Component ---
         function App() {
             const [activeTab, setActiveTab] = useState('dashboard');
+            // เริ่มต้นด้วย array ว่าง เพื่อรอโหลดจาก Sheet
             const [transactions, setTransactions] = useState([]);
             const [formData, setFormData] = useState(INITIAL_FORM_STATE);
             const [editingId, setEditingId] = useState(null);
             
             // Loading States
             const [isSaving, setIsSaving] = useState(false);
-            const [isLoading, setIsLoading] = useState(true);
-            const [isOfflineMode, setIsOfflineMode] = useState(false);
+            const [isLoading, setIsLoading] = useState(true); // เพิ่มสถานะ Loading ตอนเปิดเว็บ
+            const [isOfflineMode, setIsOfflineMode] = useState(false); // New state to track offline/demo mode
 
             // Modal States
             const [editingProject, setEditingProject] = useState(null);
             const [confirmModal, setConfirmModal] = useState(null);
             const [alertModal, setAlertModal] = useState(null);
+            const [statusModal, setStatusModal] = useState(null); // State for StatusUpdateModal
 
             // Filter States
+            // Dashboard Filters (Date Range & Keyword)
+            const [dashboardFilters, setDashboardFilters] = useState({
+                startDate: '',
+                endDate: '',
+                keyword: ''
+            });
+            
+            // Bill View Filters (Existing)
             const [billFilters, setBillFilters] = useState({
                 startDate: '',
                 endDate: '',
                 searchText: ''
             });
+            
+            // Payments View Filters (Date)
+            const [paymentFilters, setPaymentFilters] = useState({
+                startDate: '',
+                endDate: '',
+            });
+
+            // Payment Task Tab Filter
+            const [paymentTypeFilter, setPaymentTypeFilter] = useState('all'); // all, income, expense
+            const [paymentStatusFilter, setPaymentStatusFilter] = useState('all'); // all, pending, paid, hold
 
             // --- Fetch Data on Mount ---
             useEffect(() => {
@@ -263,38 +366,101 @@
             const fetchData = async () => {
                 setIsLoading(true);
                 try {
+                    // Using normal fetch, expecting JSON.
                     const response = await fetch(APPS_SCRIPT_URL);
-                    if (!response.ok) throw new Error('Network response was not ok');
+                    
+                    if (!response.ok) {
+                        throw new Error(`Network response was not ok: ${response.statusText}`);
+                    }
+                    
                     const data = await response.json();
                     
                     if (Array.isArray(data) && data.length > 0) {
-                        setTransactions(data);
+                        // Sanitize and Deduplicate
+                        const seenIds = new Set();
+                        const sanitizedData = [];
+
+                        data.forEach((item, index) => {
+                            // Normalize ID to string
+                            let currentId = item.id ? String(item.id) : `gen-${index}-${Date.now()}`;
+                            
+                            // If ID exists in sheet but is duplicated, append suffix to make unique in UI
+                            if (seenIds.has(currentId)) {
+                                currentId = `${currentId}-dup-${index}`;
+                            }
+                            
+                            seenIds.add(currentId);
+
+                            sanitizedData.push({
+                                ...item,
+                                id: currentId,
+                                status: (item.status && item.status !== "") ? item.status : 'pending',
+                                // Note: GS should return 'paymentDate' if implemented, for now use note or date
+                                paymentDate: item.paymentDate || '' 
+                            });
+                        });
+
+                        setTransactions(sanitizedData);
                         setIsOfflineMode(false);
                     } else {
                         setTransactions([]);
                         setIsOfflineMode(false);
                     }
                 } catch (error) {
-                    console.warn("Fetch failed, using mock data:", error);
-                    setTransactions([]); // Or MOCK_DATA_FALLBACK if you prefer demo data
+                    console.warn("Fetch failed, switching to offline/demo mode:", error);
+                    setTransactions(MOCK_DATA_FALLBACK);
                     setIsOfflineMode(true);
                 } finally {
                     setIsLoading(false);
                 }
             };
 
-            // --- Calculations ---
+            // --- Derived Data for Dashboard (Filtered) ---
+            const dashboardFilteredTransactions = useMemo(() => {
+                return transactions.filter(t => {
+                    const searchLower = dashboardFilters.keyword.toLowerCase();
+                    const matchesKeyword = !searchLower || 
+                        (t.category && t.category.toLowerCase().includes(searchLower)) ||
+                        (t.note && t.note.toLowerCase().includes(searchLower)) ||
+                        (t.projectRef && String(t.projectRef).toLowerCase().includes(searchLower)) ||
+                        (t.docNumber && String(t.docNumber).toLowerCase().includes(searchLower));
+
+                    // Date Range Filter
+                    let matchesDate = true;
+                    if (dashboardFilters.startDate) {
+                        matchesDate = matchesDate && t.date >= dashboardFilters.startDate;
+                    }
+                    if (dashboardFilters.endDate) {
+                        matchesDate = matchesDate && t.date <= dashboardFilters.endDate;
+                    }
+
+                    return matchesKeyword && matchesDate;
+                });
+            }, [transactions, dashboardFilters]);
+
+            // --- Calculations (Use Dashboard Filtered Data) ---
             const stats = useMemo(() => {
-                const totalRevenue = transactions.filter(t => t.type === 'income').reduce((acc, curr) => acc + Number(curr.amount), 0);
-                const totalExpenses = transactions.filter(t => t.type === 'expense').reduce((acc, curr) => acc + Number(curr.amount), 0);
+                // Use FILTERED transactions for dashboard stats
+                const dataToUse = dashboardFilteredTransactions;
+                const totalRevenue = dataToUse.filter(t => t.type === 'income').reduce((acc, curr) => acc + Number(curr.amount), 0);
+                const totalExpenses = dataToUse.filter(t => t.type === 'expense').reduce((acc, curr) => acc + Number(curr.amount), 0);
                 const netProfit = totalRevenue - totalExpenses;
                 const netMargin = totalRevenue > 0 ? ((netProfit / totalRevenue) * 100).toFixed(1) : 0;
                 return { totalRevenue, totalExpenses, netProfit, netMargin };
+            }, [dashboardFilteredTransactions]);
+
+            const paymentStats = useMemo(() => {
+                // Payment stats use ALL transactions (global view usually)
+                const pendingIncome = transactions.filter(t => t.type === 'income' && t.status === 'pending').reduce((acc, curr) => acc + Number(curr.amount), 0);
+                const pendingExpense = transactions.filter(t => t.type === 'expense' && t.status === 'pending').reduce((acc, curr) => acc + Number(curr.amount), 0);
+                const holdTotal = transactions.filter(t => t.status === 'hold').reduce((acc, curr) => acc + Number(curr.amount), 0);
+                return { pendingIncome, pendingExpense, holdTotal };
             }, [transactions]);
 
             const monthlyData = useMemo(() => {
+                // Use FILTERED transactions for chart
                 const data = {};
-                transactions.forEach(t => {
+                dashboardFilteredTransactions.forEach(t => {
                     const dateObj = new Date(t.date);
                     if (isNaN(dateObj.getTime())) return;
                     
@@ -307,16 +473,17 @@
                     data[key].กำไรสุทธิ = data[key].รายรับ - data[key].รายจ่าย;
                 });
                 return Object.values(data);
-            }, [transactions]);
+            }, [dashboardFilteredTransactions]);
 
             const expenseCategoryData = useMemo(() => {
+                // Use FILTERED transactions for pie chart
                 const data = {};
-                transactions.filter(t => t.type === 'expense').forEach(t => {
+                dashboardFilteredTransactions.filter(t => t.type === 'expense').forEach(t => {
                     if (!data[t.category]) data[t.category] = 0;
                     data[t.category] += Number(t.amount);
                 });
                 return Object.keys(data).map((key, index) => ({ name: key, value: data[key], color: COLORS[index % COLORS.length] }));
-            }, [transactions]);
+            }, [dashboardFilteredTransactions]);
 
             const projectGroups = useMemo(() => {
                 const projects = {};
@@ -358,10 +525,13 @@
             const filteredProjects = useMemo(() => {
                 return projectGroups.projectList.filter(p => {
                     const searchLower = billFilters.searchText.toLowerCase();
-                    const matchesSearch = p.name.toLowerCase().includes(searchLower) || 
-                                          (p.docNumber && p.docNumber.toLowerCase().includes(searchLower));
+                    const matchesSearch = String(p.name).toLowerCase().includes(searchLower) || 
+                                          (p.docNumber && String(p.docNumber).toLowerCase().includes(searchLower));
 
-                    const allDates = [...p.incomes, ...p.expenses].map(t => t.date);
+                    // Use formatSimple to make sure we compare dates correctly (though t.date is usually YYYY-MM-DD)
+                    // But project date range filtering needs to check if ANY transaction in the project falls in range
+                    const allDates = [...p.incomes, ...p.expenses].map(t => formatDateSimple(t.date));
+                    
                     if (allDates.length === 0) return matchesSearch;
 
                     let matchesDate = true;
@@ -375,6 +545,23 @@
                     return matchesSearch && matchesDate;
                 });
             }, [projectGroups, billFilters]);
+
+            const filteredPayments = useMemo(() => {
+                return transactions.filter(t => {
+                    const matchesType = paymentTypeFilter === 'all' || t.type === paymentTypeFilter;
+                    const matchesStatus = paymentStatusFilter === 'all' || t.status === paymentStatusFilter;
+                    
+                    let matchesDate = true;
+                    if (paymentFilters.startDate) {
+                        matchesDate = matchesDate && t.date >= paymentFilters.startDate;
+                    }
+                    if (paymentFilters.endDate) {
+                        matchesDate = matchesDate && t.date <= paymentFilters.endDate;
+                    }
+                    
+                    return matchesType && matchesStatus && matchesDate;
+                }).sort((a,b) => new Date(a.date) - new Date(b.date)); 
+            }, [transactions, paymentTypeFilter, paymentStatusFilter, paymentFilters]);
 
             const existingBills = useMemo(() => {
                 const map = new Map();
@@ -415,12 +602,122 @@
                 const { name, value } = e.target;
                 setBillFilters(prev => ({ ...prev, [name]: value }));
             };
+            
+            const handleDashboardFilterChange = (e) => {
+                const { name, value } = e.target;
+                setDashboardFilters(prev => ({ ...prev, [name]: value }));
+            };
+            
+            const handlePaymentFilterChange = (e) => {
+                const { name, value } = e.target;
+                setPaymentFilters(prev => ({ ...prev, [name]: value }));
+            }
+            
+            const resetDashboardFilters = () => {
+                setDashboardFilters({ startDate: '', endDate: '', keyword: '' });
+            };
 
             const resetBillFilters = () => {
                 setBillFilters({ startDate: '', endDate: '', searchText: '' });
             };
+            
+            const resetPaymentFilters = () => {
+                setPaymentFilters({ startDate: '', endDate: '' });
+            }
 
-            // --- Full Sync Handlers ---
+            // --- Export Functionality ---
+            const exportToCSV = (type) => {
+                const itemsToExport = transactions.filter(t => t.type === type);
+                if (itemsToExport.length === 0) {
+                    setAlertModal({ title: 'ไม่มีข้อมูล', message: `ไม่พบรายการ ${type === 'income' ? 'รายรับ' : 'รายจ่าย'} ที่จะ Export`, type: 'error' });
+                    return;
+                }
+
+                // CSV Header
+                const headers = ["วันที่", "ประเภท", "หมวดหมู่", "จำนวนเงิน", "รายละเอียด", "โครงการ", "เลขที่เอกสาร", "สถานะ"];
+                
+                // CSV Rows
+                const rows = itemsToExport.map(t => [
+                    `"${formatDateSimple(t.date)}"`,
+                    `"${t.type === 'income' ? 'รายรับ' : 'รายจ่าย'}"`,
+                    `"${t.category}"`,
+                    `"${t.amount}"`,
+                    `"${t.note || ''}"`,
+                    `"${t.projectRef}"`,
+                    `"${t.docNumber || ''}"`,
+                    `"${t.status === 'paid' ? 'สำเร็จ' : t.status === 'hold' ? 'พักการจ่าย' : 'รอดำเนินการ'}"`
+                ]);
+
+                // Combine with BOM for Thai support
+                const csvContent = "\uFEFF" + [headers.join(","), ...rows.map(r => r.join(","))].join("\n");
+                
+                // Create download link
+                const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement("a");
+                link.setAttribute("href", url);
+                link.setAttribute("download", `${type}_report_${new Date().toISOString().slice(0,10)}.csv`);
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            };
+
+            // --- Status Handler (Updated with Modal) ---
+            const openStatusModal = (transaction) => {
+                setStatusModal(transaction);
+            };
+
+            const handleStatusConfirm = async (newStatus, paymentDateTime) => {
+                if (!statusModal) return;
+                
+                const transaction = statusModal;
+                setStatusModal(null); // Close modal
+
+                // Optimistic Update
+                setTransactions(prev => prev.map(t => t.id === transaction.id ? { ...t, status: newStatus } : t));
+                
+                setIsSaving(true);
+                try {
+                    const formDataToSend = new URLSearchParams();
+                    formDataToSend.append('action', 'edit');
+                    formDataToSend.append('id', transaction.id);
+                    // Retain original data
+                    formDataToSend.append('date', transaction.date); 
+                    formDataToSend.append('type', transaction.type);
+                    formDataToSend.append('category', transaction.category);
+                    formDataToSend.append('amount', transaction.amount);
+                    // Append Payment Date info to Note if new date provided
+                    let updatedNote = transaction.note;
+                    if (paymentDateTime) {
+                        const formattedDate = new Date(paymentDateTime).toLocaleString('th-TH');
+                        updatedNote = `${transaction.note} [จ่ายเมื่อ: ${formattedDate}]`;
+                    }
+                    formDataToSend.append('note', updatedNote);
+
+                    formDataToSend.append('projectRef', transaction.projectRef);
+                    formDataToSend.append('docNumber', transaction.docNumber);
+                    formDataToSend.append('status', newStatus); 
+
+                    await fetch(APPS_SCRIPT_URL, {
+                        method: 'POST',
+                        mode: 'no-cors',
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                        body: formDataToSend
+                    });
+                    
+                    // Re-fetch to confirm sync
+                    await fetchData();
+                    setAlertModal({ title: 'สำเร็จ', message: 'อัปเดตสถานะเรียบร้อยแล้ว' });
+
+                } catch (error) {
+                    console.error("Status update failed", error);
+                    setAlertModal({ title: 'ผิดพลาด', message: 'ไม่สามารถบันทึกไปยัง Google Sheet ได้', type: 'error' });
+                    fetchData(); 
+                } finally {
+                    setIsSaving(false);
+                }
+            };
+
             const handleDelete = (id) => {
                 setConfirmModal({
                     title: 'ยืนยันการลบ',
@@ -502,9 +799,6 @@
             };
 
             const handleSaveProjectEdit = (newName, newDocNumber) => {
-                // Not implementing full sync for project name update via API in this version due to complexity of multi-row update in GAS via simple API. 
-                // Currently only UI update. For full sync, GAS needs a specific 'update_project_name' endpoint logic which is complex.
-                // We will stick to local update for now or simple alert.
                 setAlertModal({ title: 'แจ้งเตือน', message: 'ฟีเจอร์แก้ไขชื่อโครงการทั้งหมดยังไม่รองรับการ Sync ไปยัง Google Sheet ในเวอร์ชันนี้ กรุณาแก้ไขทีละรายการ หรือลบแล้วสร้างใหม่', type: 'warning' });
                 setEditingProject(null);
             };
@@ -522,6 +816,7 @@
                     ...formData,
                     amount: Number(formData.amount),
                     projectRef: finalProjectRef,
+                    status: formData.status || 'pending'
                 };
                 
                 setIsSaving(true);
@@ -536,6 +831,7 @@
                     formDataToSend.append('projectRef', newTransaction.projectRef);
                     formDataToSend.append('docNumber', newTransaction.docNumber);
                     formDataToSend.append('id', newTransaction.id);
+                    formDataToSend.append('status', newTransaction.status);
 
                     await fetch(APPS_SCRIPT_URL, {
                         method: 'POST',
@@ -544,7 +840,6 @@
                         body: formDataToSend
                     });
                     
-                    // Re-fetch to sync with sheet state
                     // Delay slightly to ensure GAS processes write
                     setTimeout(async () => {
                         await fetchData();
@@ -582,6 +877,12 @@
                     <ConfirmModal isOpen={!!confirmModal} onClose={() => setConfirmModal(null)} title={confirmModal?.title} message={confirmModal?.message} onConfirm={confirmModal?.onConfirm} />
                     <AlertModal isOpen={!!alertModal} onClose={() => setAlertModal(null)} title={alertModal?.title} message={alertModal?.message} type={alertModal?.type} />
                     <ProjectEditModal isOpen={!!editingProject} onClose={() => setEditingProject(null)} onSave={handleSaveProjectEdit} projectData={editingProject} />
+                    <StatusUpdateModal 
+                        isOpen={!!statusModal} 
+                        onClose={() => setStatusModal(null)} 
+                        onConfirm={handleStatusConfirm} 
+                        currentTransaction={statusModal} 
+                    />
 
                     <aside className="w-full md:w-64 bg-slate-900 text-white flex-shrink-0 flex flex-col">
                         <div className="p-6 border-b border-slate-800"><h1 className="text-xl font-bold flex items-center gap-2"><IconWallet className="text-emerald-400" /> ระบบบัญชี</h1><p className="text-xs text-slate-400 mt-1">Project & Bill Tracker</p></div>
@@ -589,14 +890,63 @@
                             <button onClick={() => setActiveTab('dashboard')} className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${activeTab === 'dashboard' ? 'bg-emerald-600 text-white' : 'text-slate-400 hover:bg-slate-800 hover:text-white'}`}><IconLayoutDashboard size={20} /> แดชบอร์ด</button>
                             <button onClick={() => { setActiveTab('entry'); setFormData(INITIAL_FORM_STATE); setEditingId(null); }} className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${activeTab === 'entry' ? 'bg-emerald-600 text-white' : 'text-slate-400 hover:bg-slate-800 hover:text-white'}`}><IconPlusCircle size={20} /> บันทึกรายการ</button>
                             <button onClick={() => setActiveTab('list')} className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${activeTab === 'list' ? 'bg-emerald-600 text-white' : 'text-slate-400 hover:bg-slate-800 hover:text-white'}`}><IconBriefcase size={20} /> สรุปกำไรรายบิล</button>
+                            <button onClick={() => setActiveTab('payments')} className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${activeTab === 'payments' ? 'bg-emerald-600 text-white' : 'text-slate-400 hover:bg-slate-800 hover:text-white'}`}><IconCreditCard size={20} /> งานจ่ายเงิน</button>
                         </nav>
                         <div className="p-4 border-t border-slate-800"><button onClick={fetchData} className="w-full flex items-center justify-center gap-2 px-4 py-2 text-xs text-slate-400 hover:text-white hover:bg-slate-800 rounded transition-colors"><IconCloudDownload size={14} /> รีเฟรชข้อมูล</button></div>
                     </aside>
 
                     <main className="flex-1 p-6 md:p-8 overflow-y-auto max-h-screen">
+                        {/* --- Dashboard View --- */}
                         {activeTab === 'dashboard' && (
                             <div className="space-y-6 animate-[fadeIn_0.3s_ease-in]">
-                                <div className="flex justify-between items-center mb-6"><h2 className="text-2xl font-bold text-slate-800">ภาพรวมทางการเงิน</h2><div className="text-sm text-slate-500 bg-white px-3 py-1 rounded-full shadow-sm border border-slate-200">อัปเดต: {new Date().toLocaleDateString('th-TH')}</div></div>
+                                <div className="flex justify-between items-center mb-6">
+                                    <h2 className="text-2xl font-bold text-slate-800">ภาพรวมทางการเงิน</h2>
+                                    <div className="text-sm text-slate-500 bg-white px-3 py-1 rounded-full shadow-sm border border-slate-200">อัปเดต: {new Date().toLocaleDateString('th-TH')}</div>
+                                </div>
+                                
+                                {/* Dashboard Filter Bar (Updated to Date Range) */}
+                                <Card className="p-4 border-none bg-slate-50 mb-6">
+                                    <div className="flex flex-col md:flex-row gap-4 items-end">
+                                        <div className="w-full md:w-auto">
+                                            <label className="block text-xs font-semibold text-slate-500 mb-1">ตั้งแต่วันที่</label>
+                                            <input 
+                                                type="date" 
+                                                name="startDate" 
+                                                value={dashboardFilters.startDate} 
+                                                onChange={handleDashboardFilterChange} 
+                                                className="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none" 
+                                            />
+                                        </div>
+                                        <div className="w-full md:w-auto">
+                                            <label className="block text-xs font-semibold text-slate-500 mb-1">ถึงวันที่</label>
+                                            <input 
+                                                type="date" 
+                                                name="endDate" 
+                                                value={dashboardFilters.endDate} 
+                                                onChange={handleDashboardFilterChange} 
+                                                className="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none" 
+                                            />
+                                        </div>
+                                        <div className="w-full md:w-auto flex-1 md:min-w-[200px]">
+                                            <label className="block text-xs font-semibold text-slate-500 mb-1">ค้นหา (โครงการ/หมวดหมู่/รายละเอียด)</label>
+                                            <div className="relative">
+                                                <IconSearch size={16} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400" />
+                                                <input 
+                                                    type="text" 
+                                                    name="keyword" 
+                                                    value={dashboardFilters.keyword} 
+                                                    onChange={handleDashboardFilterChange} 
+                                                    placeholder="พิมพ์คำค้นหา..." 
+                                                    className="w-full pl-9 pr-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none" 
+                                                />
+                                            </div>
+                                        </div>
+                                        <button onClick={resetDashboardFilters} className="px-4 py-2 text-sm text-slate-500 hover:text-rose-500 hover:bg-rose-50 rounded-lg transition-colors flex items-center gap-1">
+                                            <IconX size={16} /> ล้างค่า
+                                        </button>
+                                    </div>
+                                </Card>
+
                                 {transactions.length === 0 ? <div className="flex flex-col items-center justify-center h-64 bg-white rounded-xl border border-dashed border-slate-300"><IconBriefcase size={48} className="text-slate-200 mb-2"/><p className="text-slate-400">ยังไม่มีข้อมูลรายการ</p></div> : 
                                     <>
                                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -613,6 +963,8 @@
                                 }
                             </div>
                         )}
+                        
+                        {/* --- Entry Form View --- */}
                         {activeTab === 'entry' && (
                             <div className="max-w-2xl mx-auto animate-[fadeIn_0.3s_ease-in]">
                                 <h2 className="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-2">{editingId ? <><IconEdit /> แก้ไขรายการ</> : 'เพิ่มรายการใหม่'}</h2>
@@ -632,6 +984,22 @@
                                         </div>
                                         <div><label className="block text-sm font-medium mb-2">หมวดหมู่</label><select name="category" value={formData.category} onChange={handleInputChange} className="w-full px-4 py-2 border rounded-lg bg-white">{formData.type === 'income' ? <><option value="รายรับจากงานขาย">รายรับจากงานขาย</option><option value="รายรับอื่นๆ">รายรับอื่นๆ</option></> : <><option value="ต้นทุนหน้างาน">ต้นทุนหน้างาน</option><option value="ค่าคอมมิชชั่น">ค่าคอมมิชชั่น</option><option value="ค่าใช้จ่ายจิปาถะ">ค่าใช้จ่ายจิปาถะ</option><option value="เงินเดือน">เงินเดือน</option><option value="อื่นๆ">อื่นๆ</option></>}</select></div>
                                         <div><label className="block text-sm font-medium mb-2">จำนวนเงิน</label><input type="number" name="amount" value={formData.amount} onChange={handleInputChange} className="w-full px-4 py-2 border rounded-lg" required /></div>
+                                        
+                                        {/* Status Field */}
+                                        <div>
+                                            <label className="block text-sm font-medium mb-2">สถานะการจ่าย/รับเงิน</label>
+                                            <div className="flex gap-4">
+                                                <label className="flex items-center gap-2 cursor-pointer">
+                                                    <input type="radio" name="status" value="pending" checked={formData.status === 'pending'} onChange={(e) => setFormData({...formData, status: e.target.value})} className="accent-amber-500 w-4 h-4"/>
+                                                    <span className="text-sm bg-amber-100 text-amber-700 px-2 py-1 rounded-full flex items-center gap-1"><IconClock size={12}/> รอดำเนินการ</span>
+                                                </label>
+                                                <label className="flex items-center gap-2 cursor-pointer">
+                                                    <input type="radio" name="status" value="paid" checked={formData.status === 'paid'} onChange={(e) => setFormData({...formData, status: e.target.value})} className="accent-emerald-500 w-4 h-4"/>
+                                                    <span className="text-sm bg-emerald-100 text-emerald-700 px-2 py-1 rounded-full flex items-center gap-1"><IconCheckCircle size={12}/> จ่าย/รับแล้ว</span>
+                                                </label>
+                                            </div>
+                                        </div>
+
                                         <div><label className="block text-sm font-medium mb-2">บันทึกช่วยจำ</label><textarea name="note" value={formData.note} onChange={handleInputChange} className="w-full px-4 py-2 border rounded-lg"></textarea></div>
                                         <div className="flex gap-4 pt-4"><button type="button" onClick={handleCancelEdit} className="w-1/3 px-4 py-2 border rounded-lg">ยกเลิก</button><button type="submit" disabled={isSaving} className={`w-2/3 px-4 py-2 text-white rounded-lg flex justify-center items-center gap-2 ${editingId ? 'bg-blue-600' : 'bg-slate-900'} ${isSaving ? 'opacity-50' : ''}`}>{isSaving && <IconLoader size={18} className="animate-spin"/>} {isSaving ? 'กำลังบันทึก...' : 'บันทึก'}</button></div>
                                     </form>
@@ -641,12 +1009,70 @@
                         {activeTab === 'list' && (
                             <div className="space-y-6 animate-[fadeIn_0.3s_ease-in]">
                                 <div className="flex justify-between items-center"><h2 className="text-2xl font-bold">สรุปกำไรรายบิล</h2><button onClick={() => { setActiveTab('entry'); setFormData(INITIAL_FORM_STATE); setEditingId(null); }} className="bg-emerald-600 text-white px-4 py-2 rounded-lg flex items-center gap-2"><IconPlusCircle size={16}/> เปิดบิลใหม่</button></div>
-                                <Card className="p-4 border-none bg-slate-50"><div className="flex gap-4 items-end"><div className="w-full"><label className="text-xs">ค้นหา</label><input type="text" name="searchText" value={billFilters.searchText} onChange={handleFilterChange} className="w-full border px-3 py-2 rounded-lg" placeholder="พิมพ์ชื่อโครงการ..." /></div><button onClick={resetBillFilters} className="px-4 py-2 bg-white border rounded-lg"><IconX size={16}/></button></div></Card>
+                                <Card className="p-4 border-none bg-slate-50"><div className="flex gap-4 items-end">
+                                    <div className="w-full md:w-auto"><label className="block text-xs font-semibold text-slate-500 mb-1">ตั้งแต่วันที่</label><input type="date" name="startDate" value={billFilters.startDate} onChange={handleFilterChange} className="w-full border px-3 py-2 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none" /></div>
+                                    <div className="w-full md:w-auto"><label className="block text-xs font-semibold text-slate-500 mb-1">ถึงวันที่</label><input type="date" name="endDate" value={billFilters.endDate} onChange={handleFilterChange} className="w-full border px-3 py-2 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none" /></div>
+                                    <div className="w-full md:w-auto flex-1 md:min-w-[200px]"><label className="block text-xs font-semibold text-slate-500 mb-1">ค้นหาโครงการ</label><div className="relative"><IconSearch size={16} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400" /><input type="text" name="searchText" value={billFilters.searchText} onChange={handleFilterChange} className="w-full border pl-9 pr-3 py-2 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none" placeholder="พิมพ์ชื่อโครงการ..." /></div></div>
+                                    <button onClick={resetBillFilters} className="px-4 py-2 bg-white border rounded-lg text-slate-500 hover:text-rose-500 hover:bg-rose-50 transition-colors flex items-center gap-1"><IconX size={16}/> ล้างค่า</button>
+                                </div></Card>
                                 <div className="grid gap-6">{filteredProjects.map((project, idx) => (
                                     <div key={idx} className="bg-white rounded-xl shadow-sm border overflow-hidden"><div className="p-4 border-b flex justify-between bg-slate-50"><div><h3 className="font-bold flex items-center gap-2"><IconBriefcase size={18}/> {project.name}</h3><div className="text-xs text-slate-500 mt-1 flex gap-2">{project.docNumber && <span className="bg-white border px-1 rounded">{project.docNumber}</span>}<span>{project.incomes.length} รับ</span><span>{project.expenses.length} จ่าย</span></div></div><div className="flex items-center gap-4"><div className="text-right"><p className="text-xs text-slate-500">รวม</p><p className="font-bold text-emerald-600">{formatCurrency(project.totalIncome)}</p></div><div className="flex gap-1"><button onClick={() => handleEditProjectClick(project)} className="p-2 hover:bg-blue-50 text-slate-400 hover:text-blue-600 rounded"><IconSettings size={18}/></button><button onClick={() => handleDeleteProject(project)} className="p-2 hover:bg-rose-50 text-slate-400 hover:text-rose-600 rounded"><IconTrash2 size={18}/></button></div></div></div>
-                                    <div className="p-4">{project.incomes.map(inc => <div key={inc.id} className="flex justify-between text-sm p-2 hover:bg-slate-50 border-b border-dashed"><div className="flex gap-2 items-center"><span className="w-2 h-2 rounded-full bg-emerald-400"></span><span>{inc.date}</span><span className="font-medium">{inc.category}</span></div><div className="flex gap-2 items-center"><span className="text-emerald-600">+{formatCurrency(inc.amount)}</span><button onClick={() => handleEdit(inc)}><IconEdit size={14} className="text-slate-400 hover:text-blue-600"/></button><button onClick={() => handleDelete(inc.id)}><IconTrash2 size={14} className="text-slate-400 hover:text-rose-600"/></button></div></div>)}<div className="pl-4 mt-2 border-l-2 ml-4">{project.expenses.map(exp => <div key={exp.id} className="flex justify-between text-sm p-2 hover:bg-slate-50"><div className="flex gap-2 items-center"><span className="w-2 h-2 rounded-full bg-rose-400"></span><span>{exp.date}</span><span>{exp.category}</span></div><div className="flex gap-2 items-center"><span className="text-rose-600">-{formatCurrency(exp.amount)}</span><button onClick={() => handleEdit(exp)}><IconEdit size={14} className="text-slate-400 hover:text-blue-600"/></button><button onClick={() => handleDelete(exp.id)}><IconTrash2 size={14} className="text-slate-400 hover:text-rose-600"/></button></div></div>)}</div></div>
+                                    <div className="p-4">{project.incomes.map(inc => <div key={inc.id} className="flex justify-between text-sm p-2 hover:bg-slate-50 border-b border-dashed"><div className="flex gap-2 items-center"><span className="w-2 h-2 rounded-full bg-emerald-400"></span><span className="font-mono text-xs text-slate-400">{formatDateSimple(inc.date)}</span><span className="font-medium">{inc.category}</span></div><div className="flex gap-2 items-center"><span className="text-emerald-600">+{formatCurrency(inc.amount)}</span><button onClick={() => handleEdit(inc)}><IconEdit size={14} className="text-slate-400 hover:text-blue-600"/></button><button onClick={() => handleDelete(inc.id)}><IconTrash2 size={14} className="text-slate-400 hover:text-rose-600"/></button></div></div>)}<div className="pl-4 mt-2 border-l-2 ml-4">{project.expenses.map(exp => <div key={exp.id} className="flex justify-between text-sm p-2 hover:bg-slate-50"><div className="flex gap-2 items-center"><span className="w-2 h-2 rounded-full bg-rose-400"></span><span className="font-mono text-xs text-slate-400">{formatDateSimple(exp.date)}</span><span>{exp.category}</span></div><div className="flex gap-2 items-center"><span className="text-rose-600">-{formatCurrency(exp.amount)}</span><button onClick={() => handleEdit(exp)}><IconEdit size={14} className="text-slate-400 hover:text-blue-600"/></button><button onClick={() => handleDelete(exp.id)}><IconTrash2 size={14} className="text-slate-400 hover:text-rose-600"/></button></div></div>)}</div></div>
                                     <div className="p-4 bg-slate-900 text-white flex justify-between items-center"><div className="flex gap-4 text-sm"><div><span className="block text-xs text-slate-400">ต้นทุน</span>{formatCurrency(project.totalExpense)}</div><div className="w-px bg-slate-700"></div><div><span className="block text-xs text-emerald-400">Margin</span>{project.margin.toFixed(1)}%</div></div><div className="text-right"><span className="block text-xs text-slate-400">กำไรสุทธิ</span><span className="text-xl font-bold">{formatCurrency(project.profit)}</span></div></div></div>
                                 ))}</div>
+                            </div>
+                        )}
+                        {activeTab === 'payments' && (
+                            <div className="space-y-6 animate-[fadeIn_0.3s_ease-in]">
+                                <div className="flex justify-between items-center mb-6"><h2 className="text-2xl font-bold text-slate-800">งานติดตามการจ่ายเงิน</h2><div className="flex gap-2"><button onClick={() => setPaymentTypeFilter('all')} className={`px-3 py-1 rounded text-sm ${paymentTypeFilter === 'all' ? 'bg-slate-800 text-white' : 'bg-white text-slate-600'}`}>ทั้งหมด</button><button onClick={() => setPaymentTypeFilter('income')} className={`px-3 py-1 rounded text-sm ${paymentTypeFilter === 'income' ? 'bg-emerald-600 text-white' : 'bg-white text-emerald-600 border border-emerald-200'}`}>รายรับ (รอเก็บ)</button><button onClick={() => setPaymentTypeFilter('expense')} className={`px-3 py-1 rounded text-sm ${paymentTypeFilter === 'expense' ? 'bg-rose-600 text-white' : 'bg-white text-rose-600 border border-rose-200'}`}>รายจ่าย (รอโอน)</button></div>
+                                <div className="flex gap-2">
+                                     <button onClick={() => exportToCSV('income')} className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm bg-emerald-50 text-emerald-600 border border-emerald-200 hover:bg-emerald-100 transition-colors"><IconFileSpreadsheet size={16}/> Export รายรับ</button>
+                                     <button onClick={() => exportToCSV('expense')} className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm bg-rose-50 text-rose-600 border border-rose-200 hover:bg-rose-100 transition-colors"><IconFileSpreadsheet size={16}/> Export รายจ่าย</button>
+                                </div>
+                                </div>
+
+                                {/* Payment Filters (Date Range) */}
+                                <Card className="p-4 border-none bg-slate-50 mb-6">
+                                    <div className="flex flex-col md:flex-row gap-4 items-end">
+                                        <div className="w-full md:w-auto">
+                                            <label className="block text-xs font-semibold text-slate-500 mb-1">ตั้งแต่วันที่</label>
+                                            <input 
+                                                type="date" 
+                                                name="startDate" 
+                                                value={paymentFilters.startDate} 
+                                                onChange={handlePaymentFilterChange} 
+                                                className="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none" 
+                                            />
+                                        </div>
+                                        <div className="w-full md:w-auto">
+                                            <label className="block text-xs font-semibold text-slate-500 mb-1">ถึงวันที่</label>
+                                            <input 
+                                                type="date" 
+                                                name="endDate" 
+                                                value={paymentFilters.endDate} 
+                                                onChange={handlePaymentFilterChange} 
+                                                className="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none" 
+                                            />
+                                        </div>
+                                        <button onClick={resetPaymentFilters} className="px-4 py-2 text-sm text-slate-500 hover:text-rose-500 hover:bg-rose-50 rounded-lg transition-colors flex items-center gap-1">
+                                            <IconX size={16} /> ล้างค่า
+                                        </button>
+                                    </div>
+                                </Card>
+
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                    <Card className="bg-emerald-50/50 border-emerald-100"><div className="flex justify-between items-start"><div><p className="text-sm text-slate-500 font-medium">รอเก็บเงิน</p><h3 className="text-2xl font-bold text-emerald-600 mt-1">{formatCurrency(paymentStats.pendingIncome)}</h3></div><div className="p-3 bg-emerald-100 rounded-lg text-emerald-600"><IconBriefcase size={24}/></div></div></Card>
+                                    <Card className="bg-rose-50/50 border-rose-100"><div className="flex justify-between items-start"><div><p className="text-sm text-slate-500 font-medium">รอจ่ายเงิน</p><h3 className="text-2xl font-bold text-rose-600 mt-1">{formatCurrency(paymentStats.pendingExpense)}</h3></div><div className="p-3 bg-rose-100 rounded-lg text-rose-600"><IconCreditCard size={24}/></div></div></Card>
+                                    <Card className="bg-gray-50 border-gray-200"><div className="flex justify-between items-start"><div><p className="text-sm text-slate-500 font-medium">พักการจ่าย (On Hold)</p><h3 className="text-2xl font-bold text-gray-600 mt-1">{formatCurrency(paymentStats.holdTotal)}</h3></div><div className="p-3 bg-gray-200 rounded-lg text-gray-600"><IconPauseCircle size={24}/></div></div></Card>
+                                </div>
+                                <div className="space-y-4"><div className="flex gap-2 mb-2"><button onClick={() => setPaymentStatusFilter('all')} className={`px-3 py-1 rounded-full text-xs font-medium border ${paymentStatusFilter === 'all' ? 'bg-slate-200 border-slate-300' : 'bg-white border-slate-200'}`}>ทั้งหมด</button><button onClick={() => setPaymentStatusFilter('pending')} className={`px-3 py-1 rounded-full text-xs font-medium border ${paymentStatusFilter === 'pending' ? 'bg-amber-100 border-amber-300' : 'bg-white border-slate-200'}`}>รอดำเนินการ</button><button onClick={() => setPaymentStatusFilter('paid')} className={`px-3 py-1 rounded-full text-xs font-medium border ${paymentStatusFilter === 'paid' ? 'bg-green-100 border-green-300' : 'bg-white border-slate-200'}`}>เสร็จสิ้น</button><button onClick={() => setPaymentStatusFilter('hold')} className={`px-3 py-1 rounded-full text-xs font-medium border ${paymentStatusFilter === 'hold' ? 'bg-gray-100 border-gray-300' : 'bg-white border-slate-200'}`}>พักการจ่าย</button></div>
+                                {filteredPayments.length > 0 ? filteredPayments.map(t => (
+                                    <div key={t.id} className={`bg-white p-4 rounded-lg shadow-sm border border-l-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 transition-all hover:shadow-md ${t.type === 'income' ? 'border-l-emerald-500' : 'border-l-rose-500'} ${t.status === 'paid' ? 'opacity-60 grayscale-[0.5]' : t.status === 'hold' ? 'opacity-80 bg-gray-50' : ''}`}>
+                                        <div className="flex-1"><div className="flex items-center gap-2 mb-1"><span className={`text-xs px-2 py-0.5 rounded font-bold uppercase tracking-wide ${t.type === 'income' ? 'bg-emerald-100 text-emerald-700' : 'bg-rose-100 text-rose-700'}`}>{t.type === 'income' ? 'รายรับ' : 'รายจ่าย'}</span><span className="text-xs text-slate-400 font-mono">{formatDateSimple(t.date)}</span>{t.projectRef !== 'General' && <span className="text-xs bg-slate-100 px-2 py-0.5 rounded text-slate-600 flex items-center gap-1"><IconBriefcase size={10}/> {t.projectRef} {t.docNumber && `(${t.docNumber})`}</span>}</div><h4 className="font-medium text-slate-800">{t.category} <span className="text-slate-400 text-sm font-normal">- {t.note}</span></h4></div>
+                                        <div className="flex items-center gap-6 w-full md:w-auto justify-between md:justify-end"><span className={`text-lg font-bold ${t.type === 'income' ? 'text-emerald-600' : 'text-rose-600'}`}>{t.type === 'income' ? '+' : '-'}{formatCurrency(t.amount)}</span><div className="flex items-center gap-2"><button onClick={() => openStatusModal(t)} className={`flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${t.status === 'paid' ? 'bg-green-100 text-green-700 hover:bg-green-200' : t.status === 'hold' ? 'bg-gray-100 text-gray-600 hover:bg-gray-200' : 'bg-amber-100 text-amber-700 hover:bg-amber-200'}`}>{t.status === 'paid' ? <><IconCheckCircle size={16}/> จ่ายแล้ว</> : t.status === 'hold' ? <><IconPauseCircle size={16}/> พักจ่าย</> : <><IconClock size={16}/> รอดำเนินการ</>}</button><div className="h-6 w-px bg-slate-200 mx-1"></div><button onClick={() => handleEdit(t)} className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-full" title="แก้ไข"><IconEdit size={16}/></button></div></div>
+                                    </div>
+                                )) : <div className="text-center py-12 text-slate-400 bg-white rounded-xl border border-dashed border-slate-300"><p>ไม่มีรายการที่ต้องจัดการ</p></div>}
+                                </div>
                             </div>
                         )}
                     </main>
